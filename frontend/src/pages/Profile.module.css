@@ -1,0 +1,406 @@
+/* ── Layout compartido con Dashboard ── */
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+.topbar {
+  background: #ffffff;
+  border-bottom: 1px solid #e9ecef;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  height: 64px;
+  padding: 0 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.topbarLeft h1 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0a0a0a;
+  letter-spacing: -0.02em;
+}
+
+.topbarLeft p {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  margin-top: 0.1rem;
+}
+
+.roleBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.875rem;
+  background: #eff6ff;
+  color: #0071e3;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.content {
+  flex: 1;
+  padding: 2.25rem 2.25rem 3rem;
+}
+
+/* ═══════════════════════════════════════════
+   GRID DE DOS COLUMNAS
+═══════════════════════════════════════════ */
+
+.profileGrid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+/* ═══════════════════════════════════════════
+   TARJETA DE PERFIL (izquierda)
+═══════════════════════════════════════════ */
+
+.profileCard {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.625rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  position: sticky;
+  top: 1.5rem;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #0071e3;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
+}
+
+.cardName {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.cardEmail {
+  font-size: 0.875rem;
+  color: #6b7280;
+  word-break: break-all;
+}
+
+.cardBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  background: #eff6ff;
+  color: #0071e3;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin: 0.25rem 0;
+}
+
+.cardMeta {
+  font-size: 0.8125rem;
+  color: #9ca3af;
+  text-transform: capitalize;
+}
+
+.changePhotoBtn {
+  margin-top: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 6px;
+  background: transparent;
+  color: #374151;
+  font-size: 0.875rem;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  width: 100%;
+}
+
+.changePhotoBtn:hover {
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+/* ═══════════════════════════════════════════
+   COLUMNA DERECHA — SECCIONES DE FORMULARIO
+═══════════════════════════════════════════ */
+
+.formCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.formSection {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 1.75rem 1.875rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+}
+
+.sectionTitle {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.02em;
+}
+
+.sectionDivider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: -0.25rem 0 0.125rem;
+}
+
+/* Grid de dos columnas dentro del formulario */
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* ── Campos de formulario ── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.field label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #374151;
+  display: flex;
+  gap: 0.375rem;
+  align-items: center;
+}
+
+.optional {
+  font-weight: 400;
+  color: #9ca3af;
+  font-size: 0.75rem;
+}
+
+.field input {
+  padding: 0.625rem 0.75rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  color: #111827;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+.field input:focus {
+  border-color: #0071e3;
+}
+
+.field input::placeholder {
+  color: #d1d5db;
+}
+
+/* ── Toggle ── */
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+}
+
+.toggleLabel {
+  font-size: 0.9rem;
+  color: #374151;
+  font-weight: 400;
+}
+
+.toggle {
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  position: relative;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.toggleOn {
+  background: #0071e3;
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+}
+
+.toggleOn .toggleThumb {
+  transform: translateX(18px);
+}
+
+/* ── Mensajes ── */
+.successMsg {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+  border-radius: 6px;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.errorMsg {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #be123c;
+  border-radius: 6px;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+}
+
+/* ── Barra de guardar ── */
+.saveBar {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.25rem;
+}
+
+.saveBtn {
+  padding: 0.625rem 1.5rem;
+  background: #0071e3;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.saveBtn:hover:not(:disabled) { background: #0077ed; }
+.saveBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.saveBtnSecondary {
+  padding: 0.625rem 1.5rem;
+  background: transparent;
+  color: #374151;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.saveBtnSecondary:hover {
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .profileGrid {
+    grid-template-columns: 240px 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .profileGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .profileCard {
+    position: static;
+    flex-direction: row;
+    text-align: left;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .avatar {
+    margin-bottom: 0;
+    width: 64px;
+    height: 64px;
+    font-size: 1.25rem;
+  }
+
+  .cardInfo {
+    flex: 1;
+  }
+
+  .changePhotoBtn {
+    width: auto;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .content {
+    padding: 1.25rem;
+  }
+
+  .topbar {
+    padding: 0 1.25rem;
+  }
+}

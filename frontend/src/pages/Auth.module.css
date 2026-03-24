@@ -1,0 +1,316 @@
+/* ═══════════════════════════════════════════
+   LAYOUT DOS COLUMNAS
+═══════════════════════════════════════════ */
+
+.page {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Panel izquierdo oscuro (45%) ── */
+.panelLeft {
+  width: 45%;
+  flex-shrink: 0;
+  background: #0a0f1e;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 2.75rem 3rem;
+}
+
+.panelLogo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+
+.panelContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.panelEyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0071e3;
+  margin-bottom: 1rem;
+}
+
+.panelTitle {
+  font-size: 2.375rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.04em;
+  line-height: 1.12;
+  margin: 0 0 1.125rem;
+}
+
+.panelSubtitle {
+  font-size: 0.9375rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 300px;
+}
+
+/* ── Panel derecho blanco (55%) ── */
+.panelRight {
+  flex: 1;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2.5rem;
+  overflow-y: auto;
+}
+
+.formWrap {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* ═══════════════════════════════════════════
+   ENCABEZADO DEL FORMULARIO
+═══════════════════════════════════════════ */
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0a0a0a;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  margin: 0 0 0.5rem;
+}
+
+.subtitle {
+  font-size: 0.9375rem;
+  color: #6b7280;
+  margin: 0 0 2.75rem;
+  line-height: 1.55;
+}
+
+/* ═══════════════════════════════════════════
+   TARJETAS DE ROL  (lista vertical)
+═══════════════════════════════════════════ */
+
+.roleList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2.25rem;
+}
+
+.roleCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1rem;
+  background: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-left: 4px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.roleCard:hover {
+  border-color: #d1d5db;
+  border-left-color: #93c5fd;
+  background: #fafafa;
+}
+
+.roleSelected {
+  border-color: #bfdbfe !important;
+  border-left-color: #0071e3 !important;
+  background: #f0f7ff !important;
+}
+
+.roleIconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 7px;
+  background: #eff6ff;
+  color: #0071e3;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.roleSelected .roleIconWrap {
+  background: #dbeafe;
+}
+
+.roleCardText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.roleLabel {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #0a0a0a;
+  line-height: 1.2;
+}
+
+.roleDesc {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* ═══════════════════════════════════════════
+   FORMULARIO
+═══════════════════════════════════════════ */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.field label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #9ca3af;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.field input {
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid #e5e7eb;
+  border-radius: 0;
+  padding: 0.625rem 0;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #0a0a0a;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.field input::placeholder {
+  color: #d1d5db;
+}
+
+.field input:focus {
+  border-bottom-color: #0071e3;
+}
+
+/* ── Mensaje de error ── */
+.error {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #be123c;
+  border-radius: 6px;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  margin-top: -0.5rem;
+}
+
+/* ── Botón principal ── */
+.btn {
+  margin-top: 0.5rem;
+  padding: 0.875rem;
+  width: 100%;
+  background: #0071e3;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn:hover:not(:disabled) {
+  background: #0077ed;
+}
+
+.btn:active:not(:disabled) {
+  background: #006edb;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Enlace alternativo ── */
+.switch {
+  text-align: center;
+  margin-top: 1.75rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.switch a {
+  color: #0071e3;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.switch a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+
+@media (max-width: 800px) {
+  .page {
+    flex-direction: column;
+  }
+
+  .panelLeft {
+    width: 100%;
+    min-height: 220px;
+    padding: 2rem 1.75rem;
+  }
+
+  .panelContent {
+    padding-bottom: 1rem;
+  }
+
+  .panelTitle {
+    font-size: 1.625rem;
+  }
+
+  .panelRight {
+    padding: 2.5rem 1.5rem;
+    align-items: flex-start;
+  }
+
+  .formWrap {
+    max-width: 100%;
+  }
+}
