@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  comercio
+  cliente
+  fundacion
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  name         String
+  email        String        @unique
+  passwordHash String        @map("password_hash")
+  role         Role
+  phone        String?
+  createdAt    DateTime      @default(now()) @map("created_at")
+  dispositivos Dispositivo[]
+
+  @@map("users")
+}
+
+model Dispositivo {
+  id        Int       @id @default(autoincrement())
+  nombre    String
+  tipo      String
+  userId    Int       @map("user_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+  user      User      @relation(fields: [userId], references: [id])
+  lecturas  Lectura[]
+
+  @@map("dispositivos")
+}
+
+model Lectura {
+  id            Int         @id @default(autoincrement())
+  dispositivoId Int         @map("dispositivo_id")
+  consumoKwh    Float       @map("consumo_kwh")
+  fecha         DateTime
+  createdAt     DateTime    @default(now()) @map("created_at")
+  dispositivo   Dispositivo @relation(fields: [dispositivoId], references: [id])
+
+  @@index([dispositivoId])
+  @@index([fecha])
+  @@map("lecturas")
+}
