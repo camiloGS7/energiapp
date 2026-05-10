@@ -1,11 +1,9 @@
-const express = require('express')
-const authMiddleware = require('../middleware/auth')
+const express = require('express');
+const authMiddleware = require('../middleware/auth');
+const { updateProfile } = require('../controllers/userController');
 
-module.exports = (db) => {
-  const router = express.Router()
-  const { updateProfile } = require('../controllers/userController')(db)
+const router = express.Router();
 
-  router.put('/profile', authMiddleware, updateProfile)
+router.put('/profile', authMiddleware, updateProfile);
 
-  return router
-}
+module.exports = router;

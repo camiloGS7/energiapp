@@ -1,71 +1,86 @@
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const prisma = require('../lib/prisma');
 
-const VALID_ROLES = ['comercio', 'cliente', 'fundacion']
-
-module.exports = (db) => {
-  const register = async (req, res) => {
-    const { name, email, password, role } = req.body
+const register = async (req, res) => {
+  try {
+    const { name, email, password, role, phone } = req.body;
 
     if (!name || !email || !password || !role) {
-      return res.status(400).json({ error: 'Todos los campos son obligatorios' })
-    }
-    if (!VALID_ROLES.includes(role)) {
-      return res.status(400).json({ error: 'Rol inválido' })
+      return res.status(400).json({ message: 'Faltan campos obligatorios' });
     }
 
-    const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(email)
-    if (existing) {
-      return res.status(409).json({ error: 'El email ya está registrado' })
+    const validRoles = ['comercio', 'cliente', 'fundacion'];
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({ message: 'Rol inválido' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return res.status(409).json({ message: 'El correo ya está registrado' });
+    }
 
-    const result = db.prepare(
-      'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)'
-    ).run(name, email, hashedPassword, role)
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
+      data: { name, email, passwordHash, role, phone: phone || null }
+    });
 
     const token = jwt.sign(
-      { id: result.lastInsertRowid, email, role },
-      process.env.JWT_SECRET || 'dev_secret',
-      { expiresIn: '7d' }
-    )
+      { id: user.id, email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
 
-    const newUser = db.prepare(
-      'SELECT id, name, email, role, phone, created_at FROM users WHERE id = ?'
-    ).get(result.lastInsertRowid)
+    res.status(201).json({
+      message: 'Usuario registrado exitosamente',
+      token,
+      user: { id: user.id, name: user.name, email: user.email, role: user.role }
+    });
 
-    res.status(201).json({ token, user: newUser })
+  } catch (error) {
+    if (error.code === 'P2002') {
+      return res.status(409).json({ message: 'El correo ya está registrado' });
+    }
+    console.error('Error en register:', error.message);
+    res.status(500).json({ message: 'Error interno del servidor' });
   }
+};
 
-  const login = async (req, res) => {
-    const { email, password } = req.body
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ error: 'Email y contraseña son obligatorios' })
+      return res.status(400).json({ message: 'Email y contraseña son requeridos' });
     }
 
-    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email)
+    const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      return res.status(401).json({ error: 'Credenciales inválidas' })
+      return res.status(401).json({ message: 'Credenciales inválidas' });
     }
 
-    const valid = await bcrypt.compare(password, user.password)
-    if (!valid) {
-      return res.status(401).json({ error: 'Credenciales inválidas' })
+    const validPassword = await bcrypt.compare(password, user.passwordHash);
+    if (!validPassword) {
+      return res.status(401).json({ message: 'Credenciales inválidas' });
     }
 
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET || 'dev_secret',
-      { expiresIn: '7d' }
-    )
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
 
     res.json({
+      message: 'Login exitoso',
       token,
-      user: { id: user.id, name: user.name, email: user.email, role: user.role, phone: user.phone ?? null, created_at: user.created_at }
-    })
-  }
+      user: { id: user.id, name: user.name, email: user.email, role: user.role }
+    });
 
-  return { register, login }
-}
+  } catch (error) {
+    console.error('Error en login:', error.message);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
+module.exports = { register, login };
