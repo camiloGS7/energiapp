@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import { format, subDays } from 'date-fns'
 import { Zap, DollarSign, Wind, Activity, TrendingUp, TrendingDown } from 'lucide-react'
 import Sidebar from '../components/Sidebar'
 import {
@@ -73,12 +76,27 @@ function ChartTooltip({ active, payload, label }) {
 export default function Dashboard() {
   const { user } = useAuth()
 
+  const [fechaDesde, setFechaDesde] = useState(subDays(new Date(), 29))
+  const [fechaHasta, setFechaHasta] = useState(new Date())
+
   const [consumoData,    setConsumoData]    = useState(null)
   const [loadingConsumo, setLoadingConsumo] = useState(true)
   const [errorConsumo,   setErrorConsumo]   = useState(null)
 
   useEffect(() => {
-    dashboardService.getConsumo()
+    if (fechaDesde > fechaHasta) {
+      setErrorConsumo('La fecha de inicio no puede ser posterior a la fecha de fin')
+      setLoadingConsumo(false)
+      return
+    }
+
+    setLoadingConsumo(true)
+    setErrorConsumo(null)
+
+    dashboardService.getConsumo({
+      desde: format(fechaDesde, 'yyyy-MM-dd'),
+      hasta: format(fechaHasta, 'yyyy-MM-dd'),
+    })
       .then(res => {
         setConsumoData(res.data)
         setLoadingConsumo(false)
@@ -88,7 +106,7 @@ export default function Dashboard() {
         setErrorConsumo('No se pudieron cargar los datos')
         setLoadingConsumo(false)
       })
-  }, [])
+  }, [fechaDesde, fechaHasta])
 
   const roleLabel = ROLE_LABELS[user?.role] ?? user?.role
 
@@ -131,9 +149,11 @@ export default function Dashboard() {
   const weeklyData = consumoData
     ? consumoData.labels.map((label, i) => ({
         day: label.slice(5),
-        kwh: consumoData.series.reduce(
-          (sum, s) => sum + (s.data[i] ?? 0), 0
-        )
+        kwh: parseFloat(
+          consumoData.series
+            .reduce((sum, s) => sum + (s.data[i] ?? 0), 0)
+            .toFixed(1)
+        ),
       }))
     : []
 
@@ -142,7 +162,7 @@ export default function Dashboard() {
         area: s.nombre,
         kwh: parseFloat(
           s.data.reduce((sum, v) => sum + (v ?? 0), 0).toFixed(1)
-        )
+        ),
       }))
     : []
 
@@ -165,12 +185,45 @@ export default function Dashboard() {
           <span className={styles.roleBadge}>{roleLabel}</span>
         </header>
 
+        {/* Filtros de fecha */}
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', padding: '0.75rem 1.5rem', borderBottom: '1px solid #f0f0f5' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <label style={{ fontSize: '0.8rem', color: '#6b7280' }}>Desde:</label>
+            <DatePicker
+              selected={fechaDesde}
+              onChange={date => setFechaDesde(date)}
+              selectsStart
+              startDate={fechaDesde}
+              endDate={fechaHasta}
+              maxDate={fechaHasta}
+              dateFormat="dd/MM/yyyy"
+              className="date-input"
+            />
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <label style={{ fontSize: '0.8rem', color: '#6b7280' }}>Hasta:</label>
+            <DatePicker
+              selected={fechaHasta}
+              onChange={date => setFechaHasta(date)}
+              selectsEnd
+              startDate={fechaDesde}
+              endDate={fechaHasta}
+              minDate={fechaDesde}
+              maxDate={new Date()}
+              dateFormat="dd/MM/yyyy"
+              className="date-input"
+            />
+          </div>
+        </div>
+
         <div className={styles.content}>
 
           {/* ── Sección: Métricas ── */}
           <div className={styles.sectionRow}>
             <h2 className={styles.sectionTitle}>Resumen del período</h2>
-            <span className={styles.sectionMeta}>Últimos 30 días</span>
+            <span className={styles.sectionMeta}>
+              {format(fechaDesde, 'dd/MM/yyyy')} – {format(fechaHasta, 'dd/MM/yyyy')}
+            </span>
           </div>
 
           <div className={styles.metricsGrid}>
@@ -194,9 +247,9 @@ export default function Dashboard() {
 
           {!loadingConsumo && !errorConsumo && consumoData && (
             <div className={styles.chartsGrid}>
-              {/* Gráfica 1 — Consumo 30 días */}
+              {/* Gráfica 1 — Consumo por período */}
               <div className={styles.chartCard}>
-                <p className={styles.chartTitle}>Consumo energético — Últimos 30 días</p>
+                <p className={styles.chartTitle}>Consumo energético — {format(fechaDesde, 'dd/MM/yyyy')} al {format(fechaHasta, 'dd/MM/yyyy')}</p>
                 <div className={styles.chartBody}>
                   <ResponsiveContainer width="100%" height={248}>
                     <AreaChart
