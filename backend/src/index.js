@@ -12,8 +12,9 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', app: 'EnergiApp' });
 });
 
-app.use('/api/auth',  require('./routes/auth'));
-app.use('/api/users', require('./routes/users'));
+app.use('/api/auth',      require('./routes/auth'));
+app.use('/api/users',     require('./routes/users'));
+app.use('/api/dashboard', require('./routes/dashboard'));
 
 app.listen(PORT, () => {
   console.log(`EnergiApp backend corriendo en http://localhost:${PORT}`);
