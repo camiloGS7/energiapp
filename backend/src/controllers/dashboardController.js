@@ -1,4 +1,5 @@
 const prisma = require('../lib/prisma');
+const cache = require('../lib/cache');
 
 function parseFecha(str) {
   const d = new Date(str + 'T00:00:00.000Z');
@@ -33,6 +34,13 @@ const getConsumo = async (req, res) => {
 
     if (!desdeDate || !hastaDate || desdeDate > hastaDate) {
       return res.status(400).json({ message: 'Fechas inválidas. Formato esperado: YYYY-MM-DD' });
+    }
+
+    const cacheKey = `dashboard:consumo:${desde}:${hasta}`;
+    const cached = cache.get(cacheKey);
+    if (cached) {
+      res.set('X-Cache', 'HIT');
+      return res.json(cached);
     }
 
     const lecturas = await prisma.lectura.findMany({
@@ -73,12 +81,16 @@ const getConsumo = async (req, res) => {
       series.push({ dispositivoId: disp.dispositivoId, nombre: disp.nombre, data });
     }
 
-    res.json({
+    const respuesta = {
       labels,
       series,
       total: Math.round(total * 10) / 10,
       periodo: { desde, hasta },
-    });
+    };
+
+    cache.set(cacheKey, respuesta);
+    res.set('X-Cache', 'MISS');
+    res.json(respuesta);
 
   } catch (error) {
     console.error('Error en getConsumo:', error.message);
