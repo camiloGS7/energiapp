@@ -1,27 +1,29 @@
-module.exports = (db) => {
-  const updateProfile = (req, res) => {
-    const { name, email, phone } = req.body
-    const userId = req.user.id
+const prisma = require('../lib/prisma');
 
-    if (!name || !email) {
-      return res.status(400).json({ error: 'Nombre y email son obligatorios' })
+const updateProfile = async (req, res) => {
+  try {
+    const { name, phone } = req.body;
+    const userId = req.user.id;
+
+    if (!name) {
+      return res.status(400).json({ message: 'El nombre es requerido' });
     }
 
-    // Verifica que el email no lo use otro usuario
-    const taken = db.prepare('SELECT id FROM users WHERE email = ? AND id != ?').get(email, userId)
-    if (taken) {
-      return res.status(409).json({ error: 'El email ya está en uso por otra cuenta' })
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: { name, phone: phone || null },
+      select: { id: true, name: true, email: true, role: true, phone: true }
+    });
+
+    res.json({ message: 'Perfil actualizado', user });
+
+  } catch (error) {
+    if (error.code === 'P2025') {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
     }
-
-    db.prepare('UPDATE users SET name = ?, email = ?, phone = ? WHERE id = ?')
-      .run(name, email, phone || null, userId)
-
-    const updated = db.prepare(
-      'SELECT id, name, email, role, phone, created_at FROM users WHERE id = ?'
-    ).get(userId)
-
-    res.json({ user: updated })
+    console.error('Error en updateProfile:', error.message);
+    res.status(500).json({ message: 'Error interno del servidor' });
   }
+};
 
-  return { updateProfile }
-}
+module.exports = { updateProfile };
