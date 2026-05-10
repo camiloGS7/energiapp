@@ -18,4 +18,14 @@ export const userService = {
   updateProfile: (data) => api.put('/users/profile', data),
 }
 
+export const dashboardService = {
+  getConsumo: (params = {}) => {
+    const query = new URLSearchParams()
+    if (params.desde) query.append('desde', params.desde)
+    if (params.hasta) query.append('hasta', params.hasta)
+    const qs = query.toString()
+    return api.get(`/dashboard/consumo${qs ? '?' + qs : ''}`)
+  },
+}
+
 export default api
