@@ -10,3 +10,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
+
+.date-input {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  color: #374151;
+  outline: none;
+  cursor: pointer;
+  background: white;
+}
+.date-input:focus {
+  border-color: #0071e3;
+}
