@@ -11,6 +11,7 @@ import {
 } from 'recharts'
 import { useAuth } from '../context/AuthContext'
 import { dashboardService } from '../services/api'
+import { exportarDashboardPDF } from '../services/pdfService'
 import Recomendaciones from '../components/Recomendaciones'
 import styles from './Dashboard.module.css'
 
@@ -83,6 +84,25 @@ export default function Dashboard() {
   const [consumoData,    setConsumoData]    = useState(null)
   const [loadingConsumo, setLoadingConsumo] = useState(true)
   const [errorConsumo,   setErrorConsumo]   = useState(null)
+  const [exportandoPDF,  setExportandoPDF]  = useState(false)
+
+  const handleExportarPDF = async () => {
+    if (!consumoData) return
+    setExportandoPDF(true)
+    try {
+      await exportarDashboardPDF({
+        usuario:   user?.name,
+        periodo:   consumoData.periodo,
+        totalKwh:  consumoData.total,
+        series:    consumoData.series,
+        labels:    consumoData.labels,
+      })
+    } catch (err) {
+      console.error('Error al exportar PDF:', err)
+    } finally {
+      setExportandoPDF(false)
+    }
+  }
 
   useEffect(() => {
     if (fechaDesde > fechaHasta) {
@@ -183,7 +203,28 @@ export default function Dashboard() {
               })}
             </p>
           </div>
-          <span className={styles.roleBadge}>{roleLabel}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <span className={styles.roleBadge}>{roleLabel}</span>
+            <button
+              onClick={handleExportarPDF}
+              disabled={exportandoPDF || !consumoData}
+              style={{
+                background:    exportandoPDF ? '#9ca3af' : '#0071e3',
+                color:         'white',
+                border:        'none',
+                borderRadius:  '8px',
+                padding:       '6px 14px',
+                fontSize:      '0.8rem',
+                fontWeight:    600,
+                cursor:        exportandoPDF ? 'not-allowed' : 'pointer',
+                display:       'flex',
+                alignItems:    'center',
+                gap:           '6px',
+              }}
+            >
+              {exportandoPDF ? 'Generando...' : '⬇ Exportar PDF'}
+            </button>
+          </div>
         </header>
 
         {/* Filtros de fecha */}
