@@ -13,6 +13,8 @@ import { useAuth } from '../context/AuthContext'
 import { dashboardService } from '../services/api'
 import { exportarDashboardPDF } from '../services/pdfService'
 import Recomendaciones from '../components/Recomendaciones'
+import GraficaHorasPico from '../components/GraficaHorasPico'
+import AlertaHorasPico from '../components/AlertaHorasPico'
 import styles from './Dashboard.module.css'
 
 // ── Datos estáticos ──────────────────────────────────────────────
@@ -369,6 +371,25 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
+          )}
+
+          {/* ── Sección: Horas pico ── */}
+          {consumoData && (
+            <>
+              <AlertaHorasPico totalKwh={consumoData.total} />
+              <div className={styles.chartCard}>
+                <div style={{ display:'flex', justifyContent:'space-between',
+                              alignItems:'center', marginBottom:'0.5rem' }}>
+                  <p className={styles.chartTitle}>Distribución horaria del consumo</p>
+                  <span style={{ fontSize:'0.75rem', color:'#9ca3af' }}>
+                    Basado en patrones típicos del período seleccionado
+                  </span>
+                </div>
+                <div className={styles.chartBody}>
+                  <GraficaHorasPico totalKwh={consumoData.total} />
+                </div>
+              </div>
+            </>
           )}
 
           {/* ── Sección: Tabla ── */}
