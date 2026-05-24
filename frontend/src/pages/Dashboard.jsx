@@ -11,6 +11,7 @@ import {
 } from 'recharts'
 import { useAuth } from '../context/AuthContext'
 import { dashboardService } from '../services/api'
+import Recomendaciones from '../components/Recomendaciones'
 import styles from './Dashboard.module.css'
 
 // ── Datos estáticos ──────────────────────────────────────────────
@@ -230,6 +231,15 @@ export default function Dashboard() {
             {METRICS.map((m) => (
               <MetricCard key={m.label} {...m} />
             ))}
+          </div>
+
+          {/* ── Sección: Recomendaciones ── */}
+          <div style={{ marginBottom: '1.5rem' }}>
+            <div className={styles.sectionRow}>
+              <h2 className={styles.sectionTitle}>Recomendaciones</h2>
+              <span className={styles.sectionMeta}>Basadas en tu consumo actual</span>
+            </div>
+            <Recomendaciones totalKwh={consumoData ? consumoData.total : 0} />
           </div>
 
           {/* ── Sección: Gráficas ── */}
