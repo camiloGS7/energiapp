@@ -40,11 +40,12 @@ export default function Recomendaciones({ totalKwh }) {
         background: '#f8fafc',
         border: '1px solid #e5e7eb',
         borderRadius: '12px',
-        padding: '1.25rem 1.5rem',
-        minHeight: '110px',
+        padding: '1.5rem',
+        minHeight: '130px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
+        gap: '1.25rem',
       }}
     >
       <div
@@ -53,7 +54,7 @@ export default function Recomendaciones({ totalKwh }) {
           transition: 'opacity 0.5s ease',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
           {Icono && (
             <div
               style={{
@@ -74,12 +75,12 @@ export default function Recomendaciones({ totalKwh }) {
             {actual.titulo}
           </span>
         </div>
-        <p style={{ fontSize: '0.85rem', color: '#6b7280', margin: 0, lineHeight: 1.5 }}>
+        <p style={{ fontSize: '0.85rem', color: '#6b7280', margin: 0, lineHeight: 1.55 }}>
           {actual.texto}
         </p>
       </div>
 
-      <div style={{ display: 'flex', gap: '6px', marginTop: '1rem' }}>
+      <div style={{ display: 'flex', gap: '6px' }}>
         {lista.map((_, i) => (
           <span
             key={i}

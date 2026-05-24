@@ -235,7 +235,7 @@ export default function Dashboard() {
 
           {/* ── Sección: Recomendaciones ── */}
           <div style={{ marginBottom: '1.5rem' }}>
-            <div className={styles.sectionRow}>
+            <div className={styles.sectionRow} style={{ paddingBottom: '0.5rem' }}>
               <h2 className={styles.sectionTitle}>Recomendaciones</h2>
               <span className={styles.sectionMeta}>Basadas en tu consumo actual</span>
             </div>
